@@ -39,8 +39,7 @@ from .utils.utils_general.utils_general import find_close_coord, make_colnames_d
 from .utils.utils_plots.plt_framework import plt_framework
 from .utils.utils_Lenstool.redshift_extractors import make_source_z_dict, find_param_file
 from .utils.utils_Lenstool.param_extractors import read_potfile, read_bayes_file, make_param_latex_table
-from .utils.utils_astro.set_cosmology import set_cosmo
-cosmo = set_cosmo()
+from .utils.utils_astro.get_cosmology import get_cosmo
 ###############################################################################
 
 """
@@ -56,10 +55,12 @@ pg.setConfigOption('imageAxisOrder', 'row-major')
 
 
 
-
 class fits_image :
-    def __init__(self, image_path) :
+    def __init__(self, image_path, main_window=None) :
         self.image_path = image_path
+        # If an external QMainWindow is provided (e.g. from the GUI), use it
+        # instead of spawning a new independent window.
+        self.main_window = main_window  # type: ignore[assignment]
         if os.path.isfile(self.image_path[:-8] + 'wht.fits') :
             print("Weight file found: " + self.image_path[:-8] + 'wht.fits')
             self.weight_path = self.image_path[:-8] + 'wht.fits'
@@ -216,10 +217,20 @@ class fits_image :
         image_widget = DragWidget(qt_plot)
         image_widget.setLayout(image_widget_layout)
         
-        window = QMainWindow()
-        window.setWindowTitle(os.path.basename(self.image_path))
-        window.setCentralWidget(image_widget)
-        window.show()
+        if self.main_window is None:
+            window = QMainWindow()
+            window.setWindowTitle(os.path.basename(self.image_path))
+            window.setCentralWidget(image_widget)
+            window.show()
+        else:
+            # Reuse the provided main window.
+            window = self.main_window
+            # Replace any existing central widget.
+            window.setCentralWidget(image_widget)
+            window.setWindowTitle(os.path.basename(self.image_path))
+            # Ensure the window is visible (may already be shown).
+            window.show()
+
         return qt_plot, image_widget_layout, image_widget, window
     
     def plot_image(self) :
@@ -268,14 +279,6 @@ class fits_image :
             for extra_qt_plot in self.extra_qt_plots :
                 extra_qt_plot.setImage(np.flip(self.image_data, axis=0))
             print('Done')
-    
-    def plot_image_mpl(self, wcs_projection=True, units='pixel', pos=111, make_axes_labels=True, make_grid=True, crop=None, replace_image=True, extra_pad=None) :
-        fig, ax = plot_image_mpl(self.image_data, wcs=self.wcs, wcs_projection=wcs_projection, units=units, pos=pos, \
-                                 make_axes_labels=make_axes_labels, make_grid=make_grid, crop=crop, extra_pad=extra_pad)
-        plot_NE_arrows(ax, self.wcs)
-        if replace_image :
-            self.fig, self.ax = fig, ax
-        return fig, ax
     
     def set_weight(self, weight_path) :
         self.weight_path = weight_path
@@ -387,7 +390,6 @@ class fits_image :
     
     def import_catalog(self, cat, color=[1., 1., 0], mag_colnames=['magAB_F814W', 'magAB_F435W'], units='pixel') :
         self.imported_cat = self.make_catalog(cat, color=color, mag_colnames=mag_colnames, units=units)
-        #print(self.imported_cat)
         
     ###########################################################################
     
@@ -414,21 +416,6 @@ class fits_image :
     def import_lenstool(self, model_dir) :
         #self.lt_dir = model_dir
         self.lt = lenstool_model(model_dir, self)
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -464,7 +451,16 @@ class fits_image :
         self._original_keyPressEvent = self.window.keyPressEvent
         self.window.keyPressEvent = keyPressEvent
     
-
+    
+    
+    def plot_image_mpl(self, wcs_projection=True, units='pixel', pos=111, make_axes_labels=True, make_grid=True, crop=None, replace_image=True, extra_pad=None) :
+        fig, ax = plot_image_mpl(self.image_data, wcs=self.wcs, wcs_projection=wcs_projection, units=units, pos=pos, \
+                                 make_axes_labels=make_axes_labels, make_grid=make_grid, crop=crop, extra_pad=extra_pad)
+        plot_NE_arrows(ax, self.wcs)
+        if replace_image :
+            self.fig, self.ax = fig, ax
+        return fig, ax
+    
     def plot_sub_region(self, ra, dec, size=3):
         """
         Plots a square region around given RA and Dec coordinates.

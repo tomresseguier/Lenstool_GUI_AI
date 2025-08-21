@@ -38,8 +38,6 @@ from .utils.utils_general.utils_general import find_close_coord, make_colnames_d
 from .utils.utils_plots.plt_framework import plt_framework
 from .utils.utils_Lenstool.redshift_extractors import make_source_z_dict, find_param_file
 from .utils.utils_Lenstool.param_extractors import read_potfile, read_bayes_file, make_param_latex_table
-from .utils.utils_astro.set_cosmology import set_cosmo
-cosmo = set_cosmo()
 
 
 

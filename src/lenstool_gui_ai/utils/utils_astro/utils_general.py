@@ -9,7 +9,7 @@ from .get_cosmology import get_cosmo
 cosmo = get_cosmo()
 
 
-
+#stsynphot.initialize()
 
 def rearrange_points(x, y) :
     """
@@ -189,7 +189,17 @@ def orientation_angle_diff(image_ref_path, image2_path) :
     return angle
 
 
+def world_to_relative(ra, dec, reference) :
+    ref = SkyCoord(reference[0], reference[1], unit='deg')
+    world_radec = SkyCoord(ra, dec, unit='deg')
+    relative_coord = ( (world_radec.ra - ref.ra)*np.cos(ref.dec.rad), world_radec.dec - ref.dec )
+    return -relative_coord[0].arcsec, relative_coord[1].arcsec
 
+def relative_to_world(x, y, reference) :
+    arcsec_to_deg = 1/3600
+    ref = SkyCoord(reference[0], reference[1], unit='deg')
+    world_radec = (ref.ra.deg - x/np.cos(ref.dec.rad) * arcsec_to_deg, ref.dec.deg + y * arcsec_to_deg)
+    return world_radec
 
 
 

@@ -48,8 +48,7 @@ from .utils.utils_Lenstool.file_makers import best_files_maker, make_magnificati
                                                                                                                 # and are therefore dependent on my own install.
 from .utils.utils_Lenstool.operations import make_image_to_source, make_magnification_function
 from .utils.utils_astro.utils_general import relative_to_world
-from .utils.utils_astro.set_cosmology import set_cosmo
-cosmo = set_cosmo()
+
 
 
 
@@ -439,7 +438,7 @@ class curves :
                 if which_critcaus=='critical' :
                     delta_ra = np.array( [ float( lines[i].split()[1] ) for i in range(len(lines)) ] )
                     delta_dec = np.array( [ float( lines[i].split()[2] ) for i in range(len(lines)) ] )
-                    ra, dec = relative_to_world(delta_ra, delta_dec, reference=(ra_ref, dec_ref))
+                    ra, dec = relative_to_world(delta_ra, delta_dec, (ra_ref, dec_ref))
                     x, y = fits_image.world_to_image(ra, dec)
                     
                     y = fits_image.image_data.shape[0] - y
@@ -454,7 +453,7 @@ class curves :
                 if which_critcaus=='caustic' :
                     delta_ra = np.array( [ float( lines[i].split()[3] ) for i in range(len(lines)) ] )
                     delta_dec = np.array( [ float( lines[i].split()[4] ) for i in range(len(lines)) ] )
-                    ra, dec = relative_to_world(delta_ra, delta_dec, reference=(ra_ref, dec_ref))
+                    ra, dec = relative_to_world(delta_ra, delta_dec, (ra_ref, dec_ref))
                     x, y = fits_image.world_to_image(ra, dec)
                     
                     y = fits_image.image_data.shape[0] - y

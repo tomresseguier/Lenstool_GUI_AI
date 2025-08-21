@@ -7,7 +7,6 @@ def main():
     args = parser.parse_args()
 
     try:
-        stsynphot.initialize()
         image = fits_image(args.fits_file_path)
         print(f"Successfully created a fits_image instance from: {args.fits_file_path}")
         # You can now work with the 'image' object.

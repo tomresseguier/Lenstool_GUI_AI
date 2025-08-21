@@ -12,9 +12,9 @@ from astropy.io import fits
 from astropy.wcs import WCS
 import subprocess
 import pylenstool
-from ..utils_astro.set_cosmology import set_cosmo
+from ..utils_astro.get_cosmology import get_cosmo
 from ..utils_astro.utils_general import world_to_relative
-cosmo = set_cosmo()
+cosmo = get_cosmo()
 
 
 
@@ -352,7 +352,7 @@ def make_potfile_dict(param_file_path) :
         potfile_cat_opt.add_row([0] + [0.0] * (len(names)-1))
     
     potfile_cat_opt['id'] = potfile_cat['id']
-    x, y = world_to_relative(potfile_cat['ra'], potfile_cat['dec'], reference=ref)
+    x, y = world_to_relative(potfile_cat['ra'], potfile_cat['dec'], ref)
     potfile_cat_opt['x_centre'] = x
     potfile_cat_opt['y_centre'] = y
     a, b = potfile_cat['a'], potfile_cat['b']

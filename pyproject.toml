@@ -20,3 +20,19 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/pypa/sampleproject"
 "Bug Tracker" = "https://github.com/pypa/sampleproject/issues"
+
+[project.optional-dependencies]
+# Extras that users can opt into when they need the graphical interface.
+#   pip install lenstool_gui_ai[gui]
+# PyQt6 is chosen for its wide availability on PyPI.  Switch to PySide6 if you
+# prefer its LGPL license:
+#   gui = ["PySide6>=6.5"]
+# Because the GUI is optional we do *not* list the dependency in the main
+# `dependencies` section, keeping headless installs lightweight.
+
+gui = ["PyQt6>=6.5"]
+
+[project.scripts]
+# `pip install .[gui]` will create a `lenstool_GUI` executable on the user's
+# PATH that launches the PyQt6 application defined in src/lenstool_gui_ai/gui.py
+lenstool_GUI = "lenstool_gui_ai.gui:main"
