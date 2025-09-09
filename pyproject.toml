@@ -3,36 +3,21 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "lenstool_gui_ai"
-version = "0.0.1"
+name = "lenstool_gui"
+version = "3.0.0"
 authors = [
-  { name="Author Name", email="author@example.com" },
+  { name="Tom Resseguier", email="tresseg1@jhu.edu" },
 ]
-description = "A GUI for Lenstool"
+description = "A visual interface to explore astronomical images, catalogs, and lens models created using Lenstool."
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/pypa/sampleproject"
-"Bug Tracker" = "https://github.com/pypa/sampleproject/issues"
+"Homepage" = "https://github.com/tomresseguier/Lenstool_GUI_AI/"
+"Bug Tracker" = "https://github.com/tomresseguier/Lenstool_GUI_AI/issues"
 
-[project.optional-dependencies]
-# Extras that users can opt into when they need the graphical interface.
-#   pip install lenstool_gui_ai[gui]
-# PyQt6 is chosen for its wide availability on PyPI.  Switch to PySide6 if you
-# prefer its LGPL license:
-#   gui = ["PySide6>=6.5"]
-# Because the GUI is optional we do *not* list the dependency in the main
-# `dependencies` section, keeping headless installs lightweight.
 
-gui = ["PyQt6>=6.5"]
-
-[project.scripts]
-# `pip install .[gui]` will create a `lenstool_GUI` executable on the user's
-# PATH that launches the PyQt6 application defined in src/lenstool_gui_ai/gui.py
-lenstool_GUI = "lenstool_gui_ai.gui:main"

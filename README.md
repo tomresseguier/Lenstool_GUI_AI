@@ -1,3 +1,3 @@
-# Lenstool GUI AI
+# Lenstool GUI
 
-A GUI for Lenstool.
+A visual interface to explore astronomical images, catalogs, and lens models created using Lenstool.
